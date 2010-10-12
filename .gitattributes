@@ -1,1 +1,12 @@
 * text=auto !eol
+/QuickCrypt.sln -text
+QuickCrypt/Form1.Designer.cs -text
+QuickCrypt/Form1.cs -text
+QuickCrypt/Form1.resx -text
+QuickCrypt/Program.cs -text
+QuickCrypt/Properties/AssemblyInfo.cs -text
+QuickCrypt/Properties/Resources.Designer.cs -text
+QuickCrypt/Properties/Resources.resx -text
+QuickCrypt/Properties/Settings.Designer.cs -text
+QuickCrypt/Properties/Settings.settings -text
+QuickCrypt/QuickCrypt.csproj -text
