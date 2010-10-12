@@ -33,22 +33,8 @@ namespace QuickCrypt {
         private void btnDecrypt_Click(object sender, EventArgs e) {
             DataBlock data = GetDataFromForm();
             DecryptAction(ref data);
-        }
-
-        private void DecryptAction(ref DataBlock dataBlock) {
-            //decode cipher text from base64
-            byte[] rawEncrypyted = DecodeFromBase64(StringToByteArray(dataBlock.text));
-
-            //decrypt cipher text
-            string plainText = decryptStringFromBytes_AesManaged(rawEncrypyted, StringToByteArray(dataBlock.key), StringToByteArray(GetIV(dataBlock.key)));
-
-            //hash clear text
-            dataBlock.hash = GetHashofString(plainText);
-
-            //compare with passed hash (if available)
-
-            //populate dataBlock
-            dataBlock.text = plainText;
+            txtText.Text = data.text;
+            txtHash.Text = data.hash;
         }
 
         private void btnEncrypt_Click(object sender, EventArgs e) {
@@ -58,19 +44,97 @@ namespace QuickCrypt {
             txtHash.Text = data.hash;
         }
 
-        private void EncryptAction(ref DataBlock dataBlock) {
-            //hash clear-text
+        private void DecryptAction(ref DataBlock dataBlock) {
             dataBlock.hash = GetHashofString(dataBlock.text);
-
-            //encrypt clear-text
-            byte[] encresult = encryptStringToBytes_AesManaged(dataBlock.text, StringToByteArray(dataBlock.key), StringToByteArray(GetIV(dataBlock.key)));
-
-            //encode cipher text to base64
-            byte[] base64result = EncodeToBase64(encresult);
-            
-            //populate dataBlock
-            dataBlock.text = GetAsString(base64result);
+            dataBlock.text = DecryptA(dataBlock.text, dataBlock.key, GetIV(dataBlock.key));
         }
+
+        private void EncryptAction(ref DataBlock dataBlock) {
+            dataBlock.text = EncryptA(dataBlock.text, dataBlock.key, GetIV(dataBlock.key));
+            dataBlock.hash = GetHashofString(dataBlock.text);
+        }
+
+
+
+
+        public static string EncryptA(string dataToEncrypt, string password, string salt) {
+            AesManaged aes = null;
+            MemoryStream memoryStream = null;
+            CryptoStream cryptoStream = null;
+
+            try {
+                //Generate a Key based on a Password, Salt and HMACSHA1 pseudo-random number generator 
+                Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(password, Encoding.Unicode.GetBytes(salt));
+
+                //Create AES algorithm with 256 bit key and 128-bit block size 
+                aes = new AesManaged();
+                aes.Key = rfc2898.GetBytes(aes.KeySize / 8);
+                aes.IV = rfc2898.GetBytes(aes.BlockSize / 8);
+
+                //Create Memory and Crypto Streams 
+                memoryStream = new MemoryStream();
+                cryptoStream = new CryptoStream(memoryStream, aes.CreateEncryptor(), CryptoStreamMode.Write);
+
+                //Encrypt Data 
+                byte[] data = Encoding.Unicode.GetBytes(dataToEncrypt);
+                cryptoStream.Write(data, 0, data.Length);
+                cryptoStream.FlushFinalBlock();
+
+                //Return Base 64 String 
+                return Convert.ToBase64String(memoryStream.ToArray());
+            }
+            finally {
+                if (cryptoStream != null)
+                    cryptoStream.Close();
+
+                if (memoryStream != null)
+                    memoryStream.Close();
+
+                if (aes != null)
+                    aes.Clear();
+            }
+        }
+
+        public static string DecryptA(string dataToDecrypt, string password, string salt) {
+            AesManaged aes = null;
+            MemoryStream memoryStream = null;
+            CryptoStream cryptoStream = null;
+
+            try {
+                //Generate a Key based on a Password, Salt and HMACSHA1 pseudo-random number generator 
+                Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(password, Encoding.Unicode.GetBytes(salt));
+
+                //Create AES algorithm with 256 bit key and 128-bit block size 
+                aes = new AesManaged();
+                aes.Key = rfc2898.GetBytes(aes.KeySize / 8);
+                aes.IV = rfc2898.GetBytes(aes.BlockSize / 8);
+
+                //Create Memory and Crypto Streams 
+                memoryStream = new MemoryStream();
+                cryptoStream = new CryptoStream(memoryStream, aes.CreateDecryptor(), CryptoStreamMode.Write);
+
+                //Decrypt Data 
+                byte[] data = Convert.FromBase64String(dataToDecrypt);
+                cryptoStream.Write(data, 0, data.Length);
+                cryptoStream.FlushFinalBlock();
+
+                //Return Decrypted String 
+                byte[] decryptBytes = memoryStream.ToArray();
+                return Encoding.Unicode.GetString(decryptBytes, 0, decryptBytes.Length);
+            }
+            finally {
+                if (cryptoStream != null)
+                    cryptoStream.Close();
+
+                if (memoryStream != null)
+                    memoryStream.Close();
+
+                if (aes != null)
+                    aes.Clear();
+            }
+        }
+
+
 
 
 
@@ -327,6 +391,36 @@ namespace QuickCrypt {
             ASCIIEncoding ascii = new ASCIIEncoding();
             byte[] data = ascii.GetBytes(input);
             return data;
+        }
+
+        private void DecryptActionOLD(ref DataBlock dataBlock) {
+            //decode cipher text from base64
+            byte[] rawEncrypyted = DecodeFromBase64(StringToByteArray(dataBlock.text));
+
+            //decrypt cipher text
+            string plainText = decryptStringFromBytes_AesManaged(rawEncrypyted, StringToByteArray(dataBlock.key), StringToByteArray(GetIV(dataBlock.key)));
+
+            //hash clear text
+            dataBlock.hash = GetHashofString(plainText);
+
+            //compare with passed hash (if available)
+
+            //populate dataBlock
+            dataBlock.text = plainText;
+        }
+
+        private void EncryptActionOLD(ref DataBlock dataBlock) {
+            //hash clear-text
+            dataBlock.hash = GetHashofString(dataBlock.text);
+
+            //encrypt clear-text
+            byte[] encresult = encryptStringToBytes_AesManaged(dataBlock.text, StringToByteArray(dataBlock.key), StringToByteArray(GetIV(dataBlock.key)));
+
+            //encode cipher text to base64
+            byte[] base64result = EncodeToBase64(encresult);
+
+            //populate dataBlock
+            dataBlock.text = GetAsString(base64result);
         }
     }
 }
