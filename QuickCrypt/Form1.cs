@@ -83,6 +83,9 @@ namespace QuickCrypt {
                 //Return Base 64 String 
                 return Convert.ToBase64String(memoryStream.ToArray());
             }
+            catch (Exception e) {
+                return "";
+            }
             finally {
                 if (cryptoStream != null)
                     cryptoStream.Close();
@@ -121,6 +124,9 @@ namespace QuickCrypt {
                 //Return Decrypted String 
                 byte[] decryptBytes = memoryStream.ToArray();
                 return Encoding.Unicode.GetString(decryptBytes, 0, decryptBytes.Length);
+            }
+            catch (Exception e) {
+                return "";
             }
             finally {
                 if (cryptoStream != null)

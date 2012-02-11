@@ -31,11 +31,12 @@
             this.txtKey = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btnEncrypt = new System.Windows.Forms.Button();
+            this.txtMessage = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnDecrypt
             // 
-            this.btnDecrypt.Location = new System.Drawing.Point(356, 53);
+            this.btnDecrypt.Location = new System.Drawing.Point(722, 53);
             this.btnDecrypt.Name = "btnDecrypt";
             this.btnDecrypt.Size = new System.Drawing.Size(75, 23);
             this.btnDecrypt.TabIndex = 4;
@@ -45,7 +46,7 @@
             // 
             // txtHash
             // 
-            this.txtHash.Location = new System.Drawing.Point(56, 38);
+            this.txtHash.Location = new System.Drawing.Point(412, 13);
             this.txtHash.Name = "txtHash";
             this.txtHash.Size = new System.Drawing.Size(270, 20);
             this.txtHash.TabIndex = 2;
@@ -57,7 +58,7 @@
             this.txtText.Multiline = true;
             this.txtText.Name = "txtText";
             this.txtText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtText.Size = new System.Drawing.Size(443, 379);
+            this.txtText.Size = new System.Drawing.Size(782, 619);
             this.txtText.TabIndex = 3;
             // 
             // label1
@@ -72,7 +73,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 40);
+            this.label2.Location = new System.Drawing.Point(371, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 4;
@@ -96,7 +97,7 @@
             // 
             // btnEncrypt
             // 
-            this.btnEncrypt.Location = new System.Drawing.Point(356, 12);
+            this.btnEncrypt.Location = new System.Drawing.Point(722, 12);
             this.btnEncrypt.Name = "btnEncrypt";
             this.btnEncrypt.Size = new System.Drawing.Size(75, 23);
             this.btnEncrypt.TabIndex = 7;
@@ -104,11 +105,21 @@
             this.btnEncrypt.UseVisualStyleBackColor = true;
             this.btnEncrypt.Click += new System.EventHandler(this.btnEncrypt_Click);
             // 
+            // txtMessage
+            // 
+            this.txtMessage.BackColor = System.Drawing.SystemColors.Info;
+            this.txtMessage.Location = new System.Drawing.Point(15, 38);
+            this.txtMessage.Multiline = true;
+            this.txtMessage.Name = "txtMessage";
+            this.txtMessage.Size = new System.Drawing.Size(667, 38);
+            this.txtMessage.TabIndex = 8;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(470, 488);
+            this.ClientSize = new System.Drawing.Size(809, 728);
+            this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.btnEncrypt);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtKey);
@@ -134,6 +145,7 @@
         private System.Windows.Forms.TextBox txtKey;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnEncrypt;
+        private System.Windows.Forms.TextBox txtMessage;
     }
 }
 
